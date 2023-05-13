@@ -6,7 +6,10 @@ import scala.util.Random
 object RandomList extends ZIOAppDefault:
 
   val readNumber: ZIO[Any, Nothing, Int] = 
-    Console.readLine.orDie.flatMap(str => ZIO.attempt(str.toInt)).orDie
+    Console.readLine("Enter number: ").orDie.flatMap(str => ZIO.attempt(str.toInt)).catchAll{
+      case _: NumberFormatException => readNumber
+    }
+
 
 
   def generateList(n: Int): ZIO[Any, Nothing, List[Int]] = 
