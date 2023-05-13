@@ -23,3 +23,8 @@ val step2 = step1a.run("")
 val step3a = step1a.orElse(step1b)
 val step4a = step3a.run("")
 val step5a = step4a == Right(step0a)
+
+val fail1a = MyZIO.fail(step0a)
+val fail1b = MyZIO.succeed(step0b)
+val fail2 = fail1a.orElse(fail1b)
+val fail3 = fail2.run("")
