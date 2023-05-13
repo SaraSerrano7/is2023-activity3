@@ -12,7 +12,8 @@ final case class MyZIO[-R, +E, +A](run: R => Either[E, A]) {
   /*
   1. hay que retornar un MyZIO
   2. parametro del constructor: A partir del environtment r, ejecuta el calculo de either
-  3. funcionamiento orElse: si this es some, se retorna this, sino se retorna el default
+  3. funcionamiento orElse: si this es some, se retorna this, sino se retorna la evaluación del default
+  4. no usamos la anotacion sa @ porque necesitamos que coincidan los tipos
   */
 
     MyZIO{
@@ -20,8 +21,8 @@ final case class MyZIO[-R, +E, +A](run: R => Either[E, A]) {
         this.run(r) match
           case Right(a) => Right(a): Either[E2, B] 
           case Left(e) => zio.run(r) match
-            case Left(e2) => Left(e2)
-            case Right(a2) => Right(a2)   
+            case Left(e2) => Left(e2): Either[E2, B]
+            case Right(a2) => Right(a2): Either[E2, B]
         }
 
 }
