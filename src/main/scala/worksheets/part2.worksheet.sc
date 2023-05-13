@@ -68,3 +68,31 @@ val zioList = ZIO.succeed(l)
 l.map{
     n => println(n)
 }
+
+//-------------------
+
+val read1 = Console.readLine("enter number").flatMap(str => ZIO.attempt(str.toInt))
+val read2 = read1.refineToOrDie[NumberFormatException]
+val read3 = read2.orDie
+
+val readAgain1 = read1.sandbox
+val readAgain2 = readAgain1.exit
+// val readAgain3 = read
+
+
+val again1 = ZIO.succeed("3").flatMap(str => ZIO.attempt(str.toInt)).refineToOrDie[NumberFormatException]
+val again2 = again1.sandbox.exit
+
+//-----------------
+
+val try0a = ZIO.succeed("3") 
+val try0b = ZIO.succeed("aaaaaa") 
+val try1a = try0a.flatMap(str => ZIO.attempt(str.toInt))
+val try1b = try0b.flatMap(str => ZIO.attempt(str.toInt))
+val try2 = try1b.catchAll{
+    case _: NumberFormatException => try0a.flatMap(str => ZIO.attempt(str.toInt))
+}
+val try3 = try2.orDie.flatMap{n => 
+    println(n)
+    Console.printLine(n).orDie
+}
