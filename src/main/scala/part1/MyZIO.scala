@@ -18,12 +18,12 @@ final case class MyZIO[-R, +E, +A](run: R => Either[E, A]) {
     MyZIO{
       r => 
         this.run(r) match
-          case Right(a) => Right(a): Either[E2, B] //: Either[E, B]
+          case Right(a) => Right(a): Either[E2, B] 
           case Left(e) => zio.run(r) match
             case Left(e2) => Left(e2)
-            case Right(a2) => Right(a2)   //: Either[E, B]
+            case Right(a2) => Right(a2)   
         }
-        
+
 }
 
   
