@@ -26,7 +26,7 @@ object RandomListSuite extends ZIOSpecDefault:
         for 
           randomNumber <- Random.nextInt
           randomString <- Random.nextString(randomNumber)
-          _ <- TestConsole.feedLines(randomString, randomNumber.toString())//(randomChar.toString(), "3")
+          _ <- TestConsole.feedLines(randomString, randomNumber.toString())
           output <- TestConsole.silent(readNumber)
         yield assertTrue(output == randomNumber.toInt)
 
@@ -38,6 +38,15 @@ object RandomListSuite extends ZIOSpecDefault:
         yield assertTrue(result == List(-345, 245765432, 274536, -8357, 0))
       },
       test("program"){
-        ???
-      }
+        for 
+          randomNumber <- Random.nextIntBounded(100)
+          randomString <- Random.nextString(randomNumber)
+          // _ <- TestConsole.feedLines(randomString, randomNumber.toString())
+          _ <- TestConsole.feedLines(randomString, "5")
+          _ <- TestRandom.feedInts(-345, 245765432, 274536, -8357, 0)
+          _ <- TestConsole.silent(program)
+          output <- TestConsole.output
+          _ <- TestConsole.clearOutput
+        yield assertTrue(output.last.take(output.last.length()-1) == List(-345, 245765432, 274536, -8357, 0).toString())
+        }
     )
