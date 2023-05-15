@@ -14,10 +14,6 @@ object RandomList extends ZIOAppDefault:
 
 
   def generateList(n: Int): ZIO[Any, Nothing, List[Int]] = 
-    // val l = (1 to n).toList.map(num => util.Random().nextInt())
-    // val l = (1 to n).toList.map(num => Random.nextInt)
-    // ZIO.succeed(l)
-    // l.foldRight(List.empty)((a, r) => Random.nextInt ++ r)
     def myFunc2(n: Int, intAcc: List[Int]): ZIO[Any, Nothing, List[Int]] = 
     if n > 1 then
         for 
@@ -32,13 +28,6 @@ object RandomList extends ZIOAppDefault:
     
     myFunc2(n, List[Int]())
 
-
-//---------------------
-    // for 
-    //   list <- (1 to n).toList
-    //   randomNumber <- Random.nextInt
-    // yield(randomNumber)
-    
 
   val program: ZIO[Any, Nothing, Unit] = 
     for 
