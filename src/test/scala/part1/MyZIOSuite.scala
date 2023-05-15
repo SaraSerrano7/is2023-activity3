@@ -3,9 +3,6 @@ package part1
 import MyZIO.*
 import zio.test.*
 import zio.test.Assertion.*
-import src.main.scala.worksheets.`part1.worksheet`.step0a
-import src.main.scala.worksheets.`part1.worksheet`.step0b
-import src.main.scala.worksheets.`part1.worksheet`.step1a
 
 
 object MyZIOSuite extends ZIOSpecDefault:

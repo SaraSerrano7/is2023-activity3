@@ -1,4 +1,7 @@
 import scala.util.Random
+import zio.test.TestRandom
+import zio.test.Gen
+import scala.util.Random
 import zio.Exit.Success
 import zio.Exit.Failure
 import java.io.IOException
@@ -96,3 +99,94 @@ val try3 = try2.orDie.flatMap{n =>
     println(n)
     Console.printLine(n).orDie
 }
+
+//------------------
+// Gen.string.flatMap(name => println(name))
+// check(Gen.string) {
+    // name => println(name)
+// }
+
+
+val myList = (1 to 5).toList
+val myRandom = zio.Random.nextInt
+myList.map(n => zio.Random.nextInt)
+
+TestRandom.feedInts(1, 2, 3)
+val n1 = zio.Random.nextInt
+
+TestRandom.clearInts
+
+val myList2 = List[Int]()
+
+val what = 
+    for 
+        _ <- TestRandom.feedInts(1, 2)
+        num <- zio.Random.nextInt
+    yield (myList2.::(num))
+
+TestRandom.clearInts
+val myList3 = List[Int]()
+val myNumlist = (1 to 5).toList
+
+// zio.Random.nextIn
+
+// def myFunc(n: Int) =
+//     if n > 0 then
+//          zio.Random.nextInt else
+
+val myList4 = (1 to 5).toList.map(num => zio.Random.nextInt)
+
+TestRandom.feedInts(1, 2)
+for 
+    num <- zio.Random.nextInt
+
+// yield (myList3.::(num))
+yield (num)
+
+def myFunc(n: Int, intAcc: List[Int], zioAcc: ZIO[Any, Nothing, List[Int]]): ZIO[Any, Nothing, List[Int]] =
+    if n > 0 then
+        val result = 
+            for 
+                num <- zio.Random.nextInt
+                li <- zioAcc
+            yield (li.::(num)) //intAcc
+        myFunc(n - 1, intAcc, result)
+    else
+        zioAcc
+
+
+def myFunc2(n: Int, intAcc: List[Int]): ZIO[Any, Nothing, List[Int]] = 
+    if n > 1 then
+        for 
+            num <- zio.Random.nextInt
+            result <- myFunc2(n-1, intAcc) 
+        yield( result.::(num))
+         
+        else    
+            for 
+                num <- zio.Random.nextInt
+            yield (intAcc.::(num))
+
+myFunc2(2, List[Int]())
+
+// for 
+//     n <- myNumlist
+//     r <- zio.Random.nextInt
+// yield (myList3.::(r))
+
+// def myFunc(n: Int, acc: List[Int]) =
+//     if n > 0 then
+
+
+
+// TestRandom.feedInts(1, 2)
+// (1 to 5).toList.foreach{
+// //     myList3.::(zio.Random.nextInt)
+//         // println
+//     for 
+//         num <- zio.Random.nextInt
+//         _ <- myList3.::(num)
+//     yield()
+// }
+// ZIO.succeed(myList3)
+
