@@ -1,3 +1,10 @@
+import zio.Cause.Empty
+import zio.Cause.Fail
+import zio.Cause.Die
+import zio.Cause.Interrupt
+import zio.Cause.Stackless
+import zio.Cause.Then
+import zio.Cause.Both
 import scala.util.Random
 import zio.test.TestRandom
 import zio.test.Gen
@@ -8,9 +15,12 @@ import java.io.IOException
 import hello.* 
 import part1.* 
 import part2.*
+import zio.*
+import zio.test.*
 
 import zio.*
 import zio.Runtime.default.*
+import zio.test.Assertion.*
 
 val line: ZIO[String, Throwable, String] = Console.readLine("Enter a number")
 //nos dicen que no puede fallar
@@ -189,4 +199,26 @@ myFunc2(2, List[Int]())
 //     yield()
 // }
 // ZIO.succeed(myList3)
+
+//----------------------
+
+val f = ZIO.attempt("aaaa".toInt).orDie
+val sand = f.sandbox
+val exit0 = sand.exit
+ val c = sand.catchAll(cause => cause match    
+    case Fail(value, trace) => Console.printLine("value, trace: ", value, trace).orDie
+    case Die(value, trace) => Console.printLine("value, trace: ", value, trace).orDie
+    case _ => Console.printLine("nothing").orDie
+ )
+
+
+
+val whySuccess = ZIO.attempt("aaaaa".toInt)
+val catching = whySuccess.orDie
+val examine = ZIO.attempt(ZIO.attempt("aaaaa".toInt).orDie).catchAll{
+    _ => ZIO.fail(())
+}
+val exit1 = examine.exit
+exit1.isSuccess
+assertZIO(exit1.isSuccess)(equalTo(true))
 

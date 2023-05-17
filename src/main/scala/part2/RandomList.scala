@@ -7,9 +7,28 @@ import zio.Random
 object RandomList extends ZIOAppDefault:
 
   val readNumber: ZIO[Any, Nothing, Int] = 
-    Console.readLine("Enter number: ").orDie.flatMap(str => ZIO.attempt(str.toInt)).catchAll{
-      case _: NumberFormatException => readNumber
+    Console
+    .readLine("Enter number: ")
+    .orDie
+    // .flatMap(str => ZIO.attempt(str.toInt))
+    .flatMap{str => 
+      ZIO.attempt(str.toInt)
     }
+
+    
+    
+    .orDie
+    // .catchAll{
+    //   case _: NumberFormatException =>  //readNumber
+    // }
+
+
+
+    
+    // (for
+    //   line <- Console.readLine("Enter a number: ")
+    //   num <- ZIO.attempt(line.toInt)
+    // yield(num)).orDie
 
 
 
