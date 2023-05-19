@@ -5,6 +5,7 @@ import zio.*
 object RandomList extends ZIOAppDefault:
 
   val readValidNumber: ZIO[Any, Nothing, Int] = 
+    //todo: tiene sentido poder pedir un 0? Debería salir una lista vacía?
     Console
       .readLine("Enter number between 0 and 10: ")
       .orDie.flatMap{
