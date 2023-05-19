@@ -50,7 +50,6 @@ object GuessGame extends ZIOAppDefault:
     for 
       maxNum <- readNumber
       secret <- Random.nextIntBetween(1, maxNum)//Random.nextIntBounded(maxNum)
-      _ <- printMessage(s"secret: $secret, maximum: $maxNum")
       _ <- guessNumber(maxNum, secret)
     yield ()
 
