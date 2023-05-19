@@ -47,9 +47,6 @@ object RandomListSuite extends ZIOSpecDefault:
       },
       test("program"){
         for 
-          // randomNumber <- Random.nextIntBounded(100)
-          // randomString <- Random.nextString(randomNumber)
-          // _ <- TestConsole.feedLines(randomString, randomNumber.toString())
           _ <- TestConsole.feedLines("5")
           _ <- TestRandom.feedInts(-345, 245765432, 274536, -8357, 0)
           _ <- TestConsole.silent(program)
