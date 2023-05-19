@@ -49,7 +49,7 @@ object GuessGame extends ZIOAppDefault:
   val program: ZIO[Any, Nothing, Unit] = 
     for 
       maxNum <- readNumber
-      secret <- Random.nextIntBetween(1, maxNum)//Random.nextIntBounded(maxNum)
+      secret <- Random.nextIntBetween(1, maxNum)
       _ <- guessNumber(maxNum, secret)
     yield ()
 
