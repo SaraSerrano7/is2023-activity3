@@ -15,9 +15,22 @@ object GuessGame extends ZIOAppDefault:
         case _: NumberFormatException => readNumber
       }
       .flatMap{
-        num => if num < 0 then readNumber else ZIO.succeed(num)
+        num => if num < 1 then readNumber else ZIO.succeed(num)
       }
 
+      
+
+  def guessNumber(maximum: Int, secret: Int): ZIO[Any, Nothing, Int] =
+    for 
+      line <- Console.readLine(s"Enter a number between 1 and $maximum: ").orDie
+      number <- ZIO.attempt(line.toInt).catchAll{case _: NumberFormatException => guessNumber(maximum, secret)}
+      _ <- if number < secret then
+        badResult("target is HIGHER", maximum, secret)
+        else if number > secret then
+          badResult("target is LOWER", maximum, secret)
+        else
+          printMessage("Congratulations, you have guessed OK")
+    yield (number)
 
 
   def printMessage(message: String): ZIO[Any, Nothing, Unit] =
@@ -26,31 +39,33 @@ object GuessGame extends ZIOAppDefault:
     yield()
     
 
-  def badResult(message: String, secret: Int): ZIO[Any, Nothing, Unit] =
+  def badResult(message: String, maximum: Int, secret: Int): ZIO[Any, Nothing, Unit] =
     for 
       // _ <- Console.printLine(s"$message").orDie
       _ <- printMessage(message)
-      _ <- readPossibleNum(secret)
+      // _ <- readPossibleNum(secret)
+      _ <- guessNumber(maximum, secret)
     yield()
 
 
-  def readPossibleNum(secret: Int): ZIO[Any, Nothing, Unit] =
-    for
-      number <- readNumber 
-      result <- 
-        if number < secret then
-          badResult("target is HIGHER", secret)
-        else if number > secret then
-          badResult("target is LOWER", secret)
-        else
-          printMessage("Congratulations, you have guessed OK")
-    yield ()
+  // def readPossibleNum(secret: Int): ZIO[Any, Nothing, Unit] =
+  //   for
+  //     number <- readNumber 
+  //     result <- 
+  //       if number < secret then
+  //         badResult("target is HIGHER", secret)
+  //       else if number > secret then
+  //         badResult("target is LOWER", secret)
+  //       else
+  //         printMessage("Congratulations, you have guessed OK")
+  //   yield ()
 
   val program: ZIO[Any, Nothing, Unit] = 
     for 
       maxNum <- readNumber
       secret <- Random.nextIntBounded(maxNum)
-      _ <- readPossibleNum(secret)
+      // _ <- readPossibleNum(secret)
+      _ <- guessNumber(maxNum, secret)
     yield ()
 
 
