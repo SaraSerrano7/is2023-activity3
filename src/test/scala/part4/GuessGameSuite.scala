@@ -18,11 +18,7 @@ object GuessGameSuite extends ZIOSpecDefault:
     },
     test("guessNumber: reading bad numbers until winning game"){
       for
-        //secret number
         _ <- TestRandom.feedInts(7)
-        //wrong input with final ok number
-        //max number will be 45
-        //then the user tries with 23, 2, 10, 5, 6 and finally wins with 7
         _ <- TestConsole.feedLines("patata", "\n", "0", "-23", "45", "23", "2", "10", "5", "6", "7")
         _ <- TestConsole.silent(program)
         output <- TestConsole.output

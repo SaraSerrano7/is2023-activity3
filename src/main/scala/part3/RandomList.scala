@@ -5,7 +5,6 @@ import zio.*
 object RandomList extends ZIOAppDefault:
 
   val readValidNumber: ZIO[Any, Nothing, Int] = 
-    //todo: tiene sentido poder pedir un 0? Debería salir una lista vacía?
     Console
       .readLine("Enter number between 0 and 10: ")
       .orDie.flatMap{
@@ -13,13 +12,14 @@ object RandomList extends ZIOAppDefault:
           ZIO.attempt{
             str.toInt
         }
+      }.catchAll{
+        case _: NumberFormatException => readValidNumber
       }.flatMap{
         num => 
-          if num < 0 || num > 10 then readValidNumber else ZIO.succeed(num)
+          if num < 0 || num > 10 then readValidNumber 
+          else ZIO.succeed(num)
       }
-      .catchAll{
-        case _: NumberFormatException => readValidNumber
-      }
+      
 
   def generateList(n: Int): ZIO[Any, Nothing, List[Int]] = 
     def myFunc2(n: Int, intAcc: List[Int]): ZIO[Any, Nothing, List[Int]] = 
@@ -27,12 +27,15 @@ object RandomList extends ZIOAppDefault:
         for 
             num <- zio.Random.nextInt
             result <- myFunc2(n-1, intAcc) 
-        yield( result.::(num))
+        yield num :: result
          
-        else    
+        else if n == 1 then    
             for 
                 num <- zio.Random.nextInt
-            yield (intAcc.::(num))
+            yield num :: intAcc
+
+        else
+          ZIO.succeed(intAcc)
     
     myFunc2(n, List[Int]())
 

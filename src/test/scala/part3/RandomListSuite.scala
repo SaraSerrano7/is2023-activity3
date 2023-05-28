@@ -36,6 +36,18 @@ object RandomListSuite extends ZIOSpecDefault:
           output <- TestConsole.silent(readValidNumber)
         yield assertTrue(output == randomOk)
       },
+      test("generateList: empty list"){
+        for
+          _ <- TestRandom.feedInts(-345, 245765432, 274536, -8357, 0)
+          result <- TestConsole.silent(generateList(0))
+        yield assertTrue(result == List())
+      },
+      test("generateList: long 1 list"){
+        for
+          _ <- TestRandom.feedInts(-345, 245765432, 274536, -8357, 0)
+          result <- TestConsole.silent(generateList(1))
+        yield assertTrue(result == List(-345))
+      },
       test("generateList"){
         for
           _ <- TestRandom.feedInts(-345, 245765432, 274536, -8357, 0)
