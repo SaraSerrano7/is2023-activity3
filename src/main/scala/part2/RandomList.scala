@@ -10,27 +10,10 @@ object RandomList extends ZIOAppDefault:
     Console
     .readLine("Enter number: ")
     .orDie
-    // .flatMap(str => ZIO.attempt(str.toInt))
-    .flatMap{str => 
-      ZIO.attempt(str.toInt)
+    .flatMap{
+      str => ZIO.attempt(str.toInt)
     }
-
-    
-    
     .orDie
-    // .catchAll{
-    //   case _: NumberFormatException =>  //readNumber
-    // }
-
-
-
-    
-    // (for
-    //   line <- Console.readLine("Enter a number: ")
-    //   num <- ZIO.attempt(line.toInt)
-    // yield(num)).orDie
-
-
 
   def generateList(n: Int): ZIO[Any, Nothing, List[Int]] = 
     def myFunc2(n: Int, intAcc: List[Int]): ZIO[Any, Nothing, List[Int]] = 
@@ -38,12 +21,15 @@ object RandomList extends ZIOAppDefault:
         for 
             num <- zio.Random.nextInt
             result <- myFunc2(n-1, intAcc) 
-        yield( result.::(num))
+        yield num :: result
          
-        else    
+        else if n == 1 then    
             for 
                 num <- zio.Random.nextInt
-            yield (intAcc.::(num))
+            yield num :: intAcc
+
+        else
+          ZIO.succeed(intAcc)
     
     myFunc2(n, List[Int]())
 

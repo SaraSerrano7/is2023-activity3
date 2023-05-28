@@ -28,3 +28,9 @@ val fail1a = MyZIO.fail(step0a)
 val fail1b = MyZIO.succeed(step0b)
 val fail2 = fail1a.orElse(fail1b)
 val fail3 = fail2.run("")
+
+val mylist = List(1,2,3)
+for 
+    n <- mylist
+    if(n % 2 == 0)
+yield(n)

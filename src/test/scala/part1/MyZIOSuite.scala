@@ -7,38 +7,37 @@ import zio.test.Assertion.*
 
 object MyZIOSuite extends ZIOSpecDefault:
 
-//usar las cuatro combinaciones de succeed y fails
   val spec = suite("part1")(
-    test("this succeed, alt succeed") {
-      val step0a = 1 + 1
-      val step0b = 1 + 2
-      val step1a = MyZIO.succeed(step0a)
-      val step1b = MyZIO.succeed(step1a)
-      val step2 = step1a.orElse(step1b).run("")
-      assertTrue(step2 == Right(step0a))
+    test("this succeed, zio succeed") {
+      val step0This = 2
+      val step0Zio = 3
+      val step1This = MyZIO.succeed(step0This)
+      val step1Zio = MyZIO.succeed(step0Zio)
+      val step2 = step1This.orElse(step1Zio).run("")
+      assertTrue(step2 == Right(step0This))
     },
-    test("this succeed, alt fail") {
-      val step0a = 1 + 1
-      val step0b = 1 + 2
-      val step1a = MyZIO.succeed(step0a)
-      val step1b = MyZIO.fail(step1a)
-      val step2 = step1a.orElse(step1b).run("")
-      assertTrue(step2 == Right(step0a))
+    test("this succeed, zio fail") {
+      val step0This = 2
+      val step0Zio = 3
+      val step1This = MyZIO.succeed(step0This)
+      val step1Zio = MyZIO.fail(step0Zio)
+      val step2 = step1This.orElse(step1Zio).run("")
+      assertTrue(step2 == Right(step0This))
     },
-    test("this fail, alt succeed") {
-      val step0a = 1 + 1
-      val step0b = 1 + 2
-      val step1a = MyZIO.fail(step0a)
-      val step1b = MyZIO.succeed(step0b)
-      val step2 = step1a.orElse(step1b).run("")
-      assertTrue(step2 == Right(step0b))
+    test("this fail, zio succeed") {
+      val step0This = 2
+      val step0Zio = 3
+      val step1This = MyZIO.fail(step0This)
+      val step1Zio = MyZIO.succeed(step0Zio)
+      val step2 = step1This.orElse(step1Zio).run("")
+      assertTrue(step2 == Right(step0Zio))
     },
-    test("this fail, alt fail") {
-      val step0a = 1 + 1
-      val step0b = 1 + 2
-      val step1a = MyZIO.fail(step0a)
-      val step1b = MyZIO.fail(step0b)
-      val step2 = step1a.orElse(step1b).run("")
-      assertTrue(step2 == Left(step0b))
+    test("this fail, zio fail") {
+      val step0This = 2
+      val step0Zio = 3
+      val step1This = MyZIO.fail(step0This)
+      val step1Zio = MyZIO.fail(step0Zio)
+      val step2 = step1This.orElse(step1Zio).run("")
+      assertTrue(step2 == Left(step0Zio))
     }
   )
