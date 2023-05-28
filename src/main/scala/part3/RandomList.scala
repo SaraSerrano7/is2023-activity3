@@ -23,7 +23,7 @@ object RandomList extends ZIOAppDefault:
 
   def generateList(n: Int): ZIO[Any, Nothing, List[Int]] = 
     def myFunc2(n: Int, intAcc: List[Int]): ZIO[Any, Nothing, List[Int]] = 
-    if n > 1 then
+      if n > 1 then
         for 
             num <- zio.Random.nextInt
             result <- myFunc2(n-1, intAcc) 
