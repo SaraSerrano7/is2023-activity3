@@ -16,7 +16,7 @@ object GuessGameSuite extends ZIOSpecDefault:
           number <- TestConsole.silent(readNumber)
         yield assertTrue(number == 45)
     },
-    test("guessNumber: reading bad numbers until secret number"){
+    test("guessNumber: reading bad numbers until winning game"){
       for
         //secret number
         _ <- TestRandom.feedInts(7)

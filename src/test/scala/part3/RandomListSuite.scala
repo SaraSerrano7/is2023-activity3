@@ -10,7 +10,7 @@ object RandomListSuite extends ZIOSpecDefault:
 
   val spec =
     suite("part3")(
-      test("readValidNumber: reading 0 to 10 number"){
+      test("readValidNumber: reading valid number"){
         for
           random <- Random.nextIntBetween(0, 10)
           _ <- TestConsole.feedLines(random.toString())
